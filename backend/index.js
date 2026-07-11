@@ -10,7 +10,7 @@ const app = express();
 // --- UPDATE THIS CORS BLOCK ---
 const allowedOrigins = [
   "http://localhost:5173",          // For local development testing
-  "https://gptforge.netlify.app/" // Your live production Netlify app
+  "https://gptforge.netlify.app" // Your live production Netlify app
 ];
 
 app.use(

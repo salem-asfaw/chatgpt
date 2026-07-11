@@ -43,8 +43,8 @@ async function startServer() {
       console.log(`Server listening on port ${PORT}`);
     });
   } catch (err) {
-    console.error("Failed to start server:", err.message);
-  }
+  console.error("FAILED TO START SERVER:", err);
+}
 }
 
 startServer();

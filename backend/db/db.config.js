@@ -2,8 +2,7 @@ import mysql from "mysql2/promise";
 import fs from "fs";
 import path from "path";
 
-// process.cwd() always points to the project root directory (where package.json is)
-// This guarantees it looks in the root folder, even though this file is inside the /db folder!
+
 const caCertPath = path.join(process.cwd(), process.env.DB_CA_PATH || "isrgrootx1.pem");
 
 const pool = mysql.createPool({

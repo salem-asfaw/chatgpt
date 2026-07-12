@@ -7,44 +7,58 @@ import { ErrorHandler } from "./src/middleware/error-hander.js";
 
 const app = express();
 
-// --- UPDATE THIS CORS BLOCK ---
 const allowedOrigins = [
-  "http://localhost:5173",          // For local development testing
-  "https://gptforge.netlify.app" // Your live production Netlify app
+  "http://localhost:5173",
+  "https://gptforge.netlify.app",
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
-      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(null, false);
       }
     },
     credentials: true,
   })
 );
-// ------------------------------
 
-app.use(express.json()); // used to parse json payloads
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("GPTForge Backend Running");
+});
+
+app.get("/health", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "Backend is healthy",
+  });
+});
+
 app.use("/api", mainRouter);
+
 app.use(ErrorHandler);
 
 async function startServer() {
   try {
     const connection = await db.getConnection();
+
+    console.log("Database connected successfully");
+
     connection.release();
-    // Render handles the port automatically using process.env.PORT, 
-    // but keeping 3788 as a local fallback is great!
-    const PORT = process.env.PORT || 4000; //3788
+
+    const PORT = process.env.PORT || 4000;
+
     app.listen(PORT, () => {
       console.log(`Server listening on port ${PORT}`);
     });
+
   } catch (err) {
-  console.error("FAILED TO START SERVER:", err);
-}
+    console.error("FAILED TO START SERVER:", err);
+  }
 }
 
 startServer();

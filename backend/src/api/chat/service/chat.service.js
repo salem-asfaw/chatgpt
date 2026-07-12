@@ -62,6 +62,8 @@ const getMessageById = async (messageId) => {
 // GEMINI AI RESPONSE
 // ==========================
 const getAssistantAnswer = async ({ historyRow, question }) => {
+  console.log("Gemini key exists:", !!process.env.GEMINI_API_KEY);
+console.log("Gemini model:", GEMINI_MODEL);
   const formattedHistory = historyRow.map((item) => ({
     role: item.role === "assistant" ? "model" : "user",
     parts: [{ text: item.content }],
